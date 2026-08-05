@@ -1,29 +1,40 @@
-from models.llm import get_llm
+from langchain_google_genai import ChatGoogleGenerativeAI
+import streamlit as st
 
 
 def generate_answer(vector_db, question):
 
-    llm = get_llm()
-
-    retriever = vector_db.as_retriever(
-        search_kwargs={"k":3}
+    docs = vector_db.similarity_search(
+        question,
+        k=3
     )
 
-    documents = retriever.invoke(question)
-
-    context = "\n".join(
-        doc.page_content for doc in documents
+    context = "\n\n".join(
+        [doc.page_content for doc in docs]
     )
+
+
+    llm = ChatGoogleGenerativeAI(
+        model="gemini-2.5-flash",
+        google_api_key=st.secrets["GEMINI_API_KEY"],
+        temperature=0.3
+    )
+
 
     prompt = f"""
-    Use this information to answer.
+You are a retail AI assistant.
 
-    Context:
-    {context}
+Use the following document context to answer the question.
 
-    Question:
-    {question}
-    """
+Context:
+{context}
+
+Question:
+{question}
+
+Answer clearly:
+"""
+
 
     response = llm.invoke(prompt)
 
