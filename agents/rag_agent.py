@@ -1,14 +1,12 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
-import streamlit as st
-
-
 def generate_answer(vector_db, question):
 
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-2.5-flash",
-        google_api_key=st.secrets["GEMINI_API_KEY"]
+    docs = vector_db.similarity_search(
+        question,
+        k=3
     )
 
-    response = llm.invoke("Explain retail in one sentence")
+    answer = "\n\n".join(
+        [doc.page_content for doc in docs]
+    )
 
-    return response.content
+    return answer
