@@ -1,6 +1,17 @@
 import streamlit as st
 from dotenv import load_dotenv
 import os
+import streamlit as st
+
+from agents.rag_agent import generate_answer
+
+st.title("AI Retail Assistant")
+
+question = st.text_input("Ask your question")
+
+if question:
+    answer = generate_answer(vector_db, question)
+    st.write(answer)
 
 # Load API key from .env
 load_dotenv()
