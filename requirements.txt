@@ -27,3 +27,4 @@ chromadb
 pypdf
 python-dotenv
 langchain-text-splitters
+langchain-text-splitters
