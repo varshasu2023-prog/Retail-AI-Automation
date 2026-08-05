@@ -48,6 +48,8 @@ if st.button("Ask AI"):
     else:
         st.success("✅ PDF uploaded successfully!")
         st.write("Question:", question)
-
-        # This will be replaced later with the RAG pipeline
-        st.info("AI response will appear here after we connect LangChain + ChromaDB + Gemini.")
+# This will be replaced later with the RAG pipel
+if user_question:
+    response = generate_answer(vector_db, user_question)
+    st.success(response)
+       
