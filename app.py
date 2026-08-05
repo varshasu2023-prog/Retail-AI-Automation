@@ -4,6 +4,8 @@ import os
 import streamlit as st
 
 from agents.rag_agent import generate_answer
+user_question = st.text_input("Ask your question")
+from agents.rag_agent import generate_answer
 
 st.title("AI Retail Assistant")
 
