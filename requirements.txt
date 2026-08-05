@@ -12,3 +12,8 @@ sentence-transformers
 python-dotenv
 pydantic
 tavily-python
+langchain
+langchain-google-genai
+langchain-community
+chromadb
+pypdf
