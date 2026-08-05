@@ -1,14 +1,4 @@
 import streamlit as st
-from dotenv import load_dotenv
-import os
-
-from utils.pdf_loader import load_pdf
-from utils.text_splitter import split_documents
-from database.chroma_db import create_vector_db
-from agents.rag_agent import generate_answer
-
-
-load_dotenv()
 
 st.set_page_config(
     page_title="Retail AI Automation",
@@ -16,55 +6,94 @@ st.set_page_config(
     layout="wide"
 )
 
-
 st.title("🛍️ Retail AI Automation")
-st.write("### AI-Powered Retail Document Assistant")
+st.subheader("AI-Powered Retail Document Assistant")
+
+# Sidebar
+with st.sidebar:
+    st.header("⚙️ Options")
+
+    option = st.selectbox(
+        "Choose Action",
+        [
+            "Ask Question",
+            "Summarize Document",
+            "Product Analysis",
+            "Inventory Analysis"
+        ]
+    )
+
+    st.divider()
+
+    st.info(
+        """
+        Upload a retail PDF and ask AI questions.
+
+        Examples:
+        - What is the top selling product?
+        - Which product has low stock?
+        - Explain customer reviews
+        """
+    )
 
 
+# Upload PDF
 uploaded_file = st.file_uploader(
-    "Upload a Retail PDF",
+    "📄 Upload a Retail PDF",
     type=["pdf"]
 )
 
 
-if uploaded_file:
-
-    # Save PDF temporarily
-    with open("temp.pdf", "wb") as f:
-        f.write(uploaded_file.getbuffer())
-
-
-    # Load PDF
-    documents = load_pdf("temp.pdf")
+# Question box
+question = st.text_input(
+    "💬 Ask a question about the document"
+)
 
 
-    # Split text
-    chunks = split_documents(documents)
+# Example questions
+st.write("### 💡 Example Questions")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    if st.button("📦 Show products"):
+        question = "List all products"
+
+with col2:
+    if st.button("📊 Sales summary"):
+        question = "Give sales summary"
+
+with col3:
+    if st.button("⚠️ Low stock items"):
+        question = "Which products have low stock?"
 
 
-    # Create ChromaDB
-    vector_db = create_vector_db(chunks)
+# Ask button
+if st.button("🚀 Ask AI"):
+
+    if uploaded_file is None:
+        st.warning("Please upload PDF")
+
+    elif question == "":
+        st.warning("Please enter question")
+
+    else:
+
+        st.success("✅ PDF processed successfully")
+
+        answer = generate_answer(
+            vector_db,
+            question
+        )
+
+        st.subheader("🤖 AI Answer")
+
+        st.write(answer)
 
 
-    st.success("✅ PDF uploaded successfully!")
+# Footer
+st.divider()
 
-
-    question = st.text_input(
-        "Ask a question about the document"
-    )
-
-
-    if st.button("Ask AI"):
-
-        if question:
-
-            answer = generate_answer(
-                vector_db,
-                question
-            )
-
-            st.write("### AI Answer:")
-            st.success(answer)
-
-        else:
-            st.warning("Please enter a question.")
+st.caption(
+    "Built with LangChain + ChromaDB + Gemini + Streamlit"
+)
