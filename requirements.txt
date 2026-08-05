@@ -15,3 +15,4 @@ pydantic
 tavily-python
 fastapi
 uvicorn
+langchain-chroma
