@@ -7,7 +7,7 @@ def create_vector_db(chunks):
 
     embeddings = GoogleGenerativeAIEmbeddings(
         model="models/text-embedding-004",
-        google_api_key=st.secrets["GEMINI_API_KEY"]
+        google_api_key=st.secrets[AIzaSyAb8RN6I7RQHMvBdDRMwYLep_D6n0MCY0wvDOvq9Qg0Nq1TAaKA]
     )
 
     vector_db = Chroma.from_documents(
