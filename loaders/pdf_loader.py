@@ -26,3 +26,16 @@ if __name__ == "__main__":
     document = loader.extract_text()
 
     print(document[:1000])
+import fitz
+
+def load_pdf(file_path):
+    text = ""
+
+    pdf = fitz.open(file_path)
+
+    for page in pdf:
+        text += page.get_text()
+
+    pdf.close()
+
+    return text
