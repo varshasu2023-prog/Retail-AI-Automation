@@ -5,10 +5,6 @@ from agents.rag_agent import generate_answer
 from utils.pdf_loader import load_pdf
 from utils.text_splitter import split_documents
 from database.chroma_db import create_vector_db
-from utils.pdf_loader import load_pdf
-from utils.text_splitter import split_documents
-from database.chroma_db import create_vector_db
-from agents.rag_agent import generate_answer
 
 st.set_page_config(
     page_title="Retail AI Automation",
@@ -65,19 +61,6 @@ uploaded_file = st.file_uploader(
 )
 
 vector_db = None
-
-if uploaded_file:
-
-    with open("temp.pdf", "wb") as f:
-        f.write(uploaded_file.getbuffer())
-
-    documents = load_pdf("temp.pdf")
-
-    chunks = split_documents(documents)
-
-    vector_db = create_vector_db(chunks)
-
-    st.success("✅ PDF processed successfully")
 
 # Example questions
 st.write("### 💡 Example Questions")
