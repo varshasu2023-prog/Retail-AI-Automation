@@ -16,3 +16,7 @@ tavily-python
 fastapi
 uvicorn
 langchain-chroma
+langchain-google-genai
+langchain-chroma
+langchain-text-splitters
+chromadb
