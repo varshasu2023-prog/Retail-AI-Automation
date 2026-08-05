@@ -20,3 +20,5 @@ langchain-google-genai
 langchain-chroma
 langchain-text-splitters
 chromadb
+langchain-google-genai
+google-generativeai
