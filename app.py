@@ -1,19 +1,13 @@
-
 import streamlit as st
 from dotenv import load_dotenv
 import os
 
+from utils.pdf_loader import load_pdf
+from utils.text_splitter import split_documents
+from database.chroma_db import create_vector_db
 from agents.rag_agent import generate_answer
 
-st.title("AI Retail Assistant")
 
-question = st.text_input("Ask your question")
-
-if question:
-    answer = generate_answer(vector_db, question)
-    st.write(answer)
-
-# Load API key from .env
 load_dotenv()
 
 st.set_page_config(
@@ -22,59 +16,55 @@ st.set_page_config(
     layout="wide"
 )
 
+
 st.title("🛍️ Retail AI Automation")
 st.write("### AI-Powered Retail Document Assistant")
 
-api_key = os.getenv("GOOGLE_API_KEY")
-
-if not api_key:
-    st.error("❌ GOOGLE_API_KEY not found. Please add it to your .env file.")
-    st.stop()
 
 uploaded_file = st.file_uploader(
     "Upload a Retail PDF",
     type=["pdf"]
 )
 
-question = st.text_input(
-    "Ask a question about the document"
-)
-
-if st.button("Ask AI"):
-    if uploaded_file is None:
-        st.warning("Please upload a PDF.")
-    elif question == "":
-        st.warning("Please enter a question.")
-    else:
-        st.success("✅ PDF uploaded successfully!")
-        st.write("Question:", question)
-        uploaded_file = st.file_uploader("Upload a Retail PDF")
 
 if uploaded_file:
 
-    # PDF processing
+    # Save PDF temporarily
+    with open("temp.pdf", "wb") as f:
+        f.write(uploaded_file.getbuffer())
+
+
+    # Load PDF
     documents = load_pdf("temp.pdf")
 
+
+    # Split text
     chunks = split_documents(documents)
 
+
+    # Create ChromaDB
     vector_db = create_vector_db(chunks)
 
-    st.success("PDF uploaded successfully!")
+
+    st.success("✅ PDF uploaded successfully!")
 
 
-    user_question = st.text_input(
+    question = st.text_input(
         "Ask a question about the document"
     )
 
 
-    if user_question:
+    if st.button("Ask AI"):
 
-        response = generate_answer(
-            vector_db,
-            user_question
-        )
+        if question:
 
-        st.write("### Answer:")
-        st.success(response)
-# This will be replaced later with the RAG pipe
-       
+            answer = generate_answer(
+                vector_db,
+                question
+            )
+
+            st.write("### AI Answer:")
+            st.success(answer)
+
+        else:
+            st.warning("Please enter a question.")
