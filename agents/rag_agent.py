@@ -4,38 +4,30 @@ import streamlit as st
 
 def generate_answer(vector_db, question):
 
-    docs = vector_db.similarity_search(
-        question,
-        k=3
-    )
+    docs = vector_db.similarity_search(question, k=3)
 
     context = "\n\n".join(
         [doc.page_content for doc in docs]
     )
 
-
     llm = ChatGoogleGenerativeAI(
-        model="gemini-2.5-flash",
+        model="gemini-2.5-flash-lite",
         google_api_key=st.secrets["GEMINI_API_KEY"],
-        temperature=0.3
+        temperature=0
     )
 
-
     prompt = f"""
-You are a retail AI assistant.
+You are a retail document assistant.
 
-Use the following document context to answer the question.
+Answer only using this context:
 
-Context:
 {context}
 
 Question:
 {question}
-
-Answer clearly:
 """
-
 
     response = llm.invoke(prompt)
 
     return response.content
+
