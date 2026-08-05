@@ -4,8 +4,6 @@ import os
 import streamlit as st
 
 from agents.rag_agent import generate_answer
-user_question = st.text_input("Ask your question")
-from agents.rag_agent import generate_answer
 
 st.title("AI Retail Assistant")
 
@@ -50,8 +48,5 @@ if st.button("Ask AI"):
     else:
         st.success("✅ PDF uploaded successfully!")
         st.write("Question:", question)
-# This will be replaced later with the RAG pipel
-if user_question:
-    response = generate_answer(vector_db, user_question)
-    st.success(response)
+# This will be replaced later with the RAG pipe
        
