@@ -48,5 +48,33 @@ if st.button("Ask AI"):
     else:
         st.success("✅ PDF uploaded successfully!")
         st.write("Question:", question)
+        uploaded_file = st.file_uploader("Upload a Retail PDF")
+
+if uploaded_file:
+
+    # PDF processing
+    documents = load_pdf("temp.pdf")
+
+    chunks = split_documents(documents)
+
+    vector_db = create_vector_db(chunks)
+
+    st.success("PDF uploaded successfully!")
+
+
+    user_question = st.text_input(
+        "Ask a question about the document"
+    )
+
+
+    if user_question:
+
+        response = generate_answer(
+            vector_db,
+            user_question
+        )
+
+        st.write("### Answer:")
+        st.success(response)
 # This will be replaced later with the RAG pipe
        
