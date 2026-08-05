@@ -1,1 +1,14 @@
-
+langchain
+langgraph
+chromadb
+streamlit
+fastapi
+uvicorn
+pymupdf
+google-generativeai
+langchain-google-genai
+langchain-community
+sentence-transformers
+python-dotenv
+pydantic
+tavily-python
